@@ -1194,7 +1194,7 @@ let resultsUnsubscribe = null;
 const ADMIN_PASSWORD = '1234'; 
 const DRAW_TIMES = ['11:00 AM', '1:00 PM', '3:00 PM', '5:00 PM', '7:00 PM', '9:00 PM'];
 const STORAGE_KEY = 'millionaire_dubai_data';
-const DUBAI_TIMEZONE_OFFSET = 4; // Dubai Time (UTC+4)
+const YANGON_TIMEZONE = 'Asia/Yangon'; // Myanmar Time (UTC+6:30)
 
 // Main Randomizer အတွက် ပြောင်းလဲနိုင်သော အခြေအနေများ
 let isMainNumberFrozen = false;
@@ -1253,9 +1253,9 @@ function startMainNumberRandomizer() {
 }
 
 // ================= TIME CALCULATION =================
-function getDubaiTimeInfo() {
+function getYangonTimeInfo() {
     const parts = new Intl.DateTimeFormat('en-GB', {
-        timeZone: 'Asia/Dubai',
+        timeZone: YANGON_TIMEZONE,
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
@@ -1283,7 +1283,7 @@ function getDubaiTimeInfo() {
 // ================= RENDER & CHECK LOGIC =================
 function checkTimeAndUpdateView() {
     const data = getData();
-    const dubaiNow = getDubaiTimeInfo();
+    const dubaiNow = getYangonTimeInfo();
     const currentHour = dubaiNow.getHours();
     const currentMinute = dubaiNow.getMinutes();
     const currentSecond = dubaiNow.getSeconds();
@@ -1533,7 +1533,7 @@ const HISTORY_COLLECTION = db.collection('resultsHistory');
 
 function getDubaiDateKey() {
     const parts = new Intl.DateTimeFormat('en-CA', {
-        timeZone: 'Asia/Dubai',
+        timeZone: YANGON_TIMEZONE,
         year: 'numeric',
         month: '2-digit',
         day: '2-digit'
@@ -1846,9 +1846,9 @@ function renderDubai3DPage() {
     const time = document.getElementById('pageDubai3DTime');
     if (value) value.textContent = data.dubai3D || '3**';
     if (time) {
-        const now = getDubaiTimeInfo();
-        time.textContent = 'Dubai Time: ' + new Intl.DateTimeFormat('en-GB', {
-            timeZone: 'Asia/Dubai',
+        const now = getYangonTimeInfo();
+        time.textContent = 'ရန်ကုန်စံတော်ချိန်: ' + new Intl.DateTimeFormat('en-GB', {
+            timeZone: YANGON_TIMEZONE,
             dateStyle: 'medium',
             timeStyle: 'medium'
         }).format(new Date());
