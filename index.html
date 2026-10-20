@@ -1759,8 +1759,32 @@ function loadSelectedHistory() {
     }
 
     const times = record.times || {};
+
+    // Use Yangon time to hide today's results until their scheduled time.
+    const isToday = dateKey === getDubaiDateKey();
+    const now = getYangonTimeInfo();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    const drawMinutes = {
+        '11:00 AM': 11 * 60,
+        '1:00 PM': 13 * 60,
+        '3:00 PM': 15 * 60,
+        '5:00 PM': 17 * 60,
+        '7:00 PM': 19 * 60,
+        '9:00 PM': 21 * 60
+    };
+
     const rows = DRAW_TIMES.map(time => {
-        const value = String(times[time] ?? '').trim();
+        const scheduledMinutes = drawMinutes[time];
+        const waitingForResult =
+            isToday &&
+            scheduledMinutes !== undefined &&
+            currentMinutes < scheduledMinutes;
+
+        const value = waitingForResult
+            ? ''
+            : String(times[time] ?? '').trim();
+
         return `
           <div class="gdh-row">
             <span class="gdh-time">${escapeHistoryText(time)}</span>
